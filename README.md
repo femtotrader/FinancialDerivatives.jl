@@ -19,12 +19,14 @@ pkg> add FinancialDerivatives
 To price an European option, simply create a new `EuropeanOption` and pass it to `evaluate` with the desired valuation model:
 
 ```julia
-julia> using FinancialDerivatives
+julia> eu_put = EuropeanOption(100.0, 90.0, 0.05, 0.01, 0.3, 180 / 365, false)
+EuropeanOption{Float64, Float64, Float64, Float64, Float64, Float64}(100.0, 90.0, 0.05, 0.01, 0.3, 0.4931506849315068, false)
 
-julia> euro_put = EuropeanOption(s=100.0, k=90.0, r=0.05, q=0.0, σ=0.3, t=180 / 365, call=false)
+julia> eu_md = EquityMarketData(; spot_price=100.0, risk_free_rate=0.05, dividend_yield=0.01, volatility=0.3)
+EquityMarketData{Float64, Float64, Float64, Float64}(100.0, 0.05, 0.01, 0.3)
 
-julia> evaluate(euro_put, BlackScholes())
-3.2281936525908073
+julia> price(AnalyticEngine(), eu_put, BlackScholes(), eu_md) 
+3.3455749727441635
 ```
 
 [dev-img]: https://img.shields.io/badge/docs-stable-blue.svg
